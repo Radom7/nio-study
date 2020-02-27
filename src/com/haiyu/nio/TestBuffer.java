@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
  * put() : 存入数据到缓冲区中
  * get() : 获取缓冲区中的数据
  *
- * 四、缓冲区的四个核心属性：
+ * 三、缓冲区的四个核心属性：
  * capacity : 容量，表示缓冲区中最大存储数据的容量，一旦声明不能改变。
  * limit : 界限，表示缓冲区中可以操作数据的大小（limit后数据不能进行读写）
  * position : 位置，表示缓冲区中正在操作数据的位置
@@ -29,7 +29,7 @@ import java.nio.ByteBuffer;
  *
  * 大小排序：mark <= position <= limit <= capacity
  *
- * 五、直接缓冲区于非直接缓冲区
+ * 四、直接缓冲区于非直接缓冲区
  * 非直接缓冲区： 通过allocate()方法分配缓冲区，将缓冲区建立在JVM的内存中
  * 直接缓冲区： 通过allocateDirect()方法分配直接缓冲区，将缓冲区建立在物理内存中，可以提高效率
  *
@@ -122,6 +122,10 @@ public class TestBuffer {
 
     @Test
     public void test3(){
-        
+        //直接缓冲区 （直接放在物理内存中，无内存复制）
+        ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+
+        //非直接缓冲区（缓冲区复制）
+        buffer = ByteBuffer.allocateDirect(1024);
     }
 }
