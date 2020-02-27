@@ -7,11 +7,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @Desc:
@@ -49,6 +56,11 @@ import java.nio.file.StandardOpenOption;
  *      注意：按照缓冲区的顺序，将Channel中读取的数据依次将Buffer填满。
  * 聚集写入（Gathering Writes）: 将多个缓冲区中的数据聚集到通道中。
  *      注意：按照缓冲区的数据，写入position和limit之间的数据到Channel。
+ *
+ * 六、字符集：Charset
+ * 编码：字符串 -> 字符数组
+ * 解码：字符数组 -> 字符串
+ *
  *
  * @Author: liuxing
  * @Date: 2020/2/27 11:46
@@ -197,4 +209,50 @@ public class TestChannel {
         channel2.write(buffers);
     }
 
+    //字符集
+    @Test
+    public void test5(){
+        Map<String,Charset> map = Charset.availableCharsets();
+
+        Set<Map.Entry<String,Charset>> set = map.entrySet();
+
+        for(Map.Entry<String,Charset> entry :set){
+            System.out.println(entry.getKey() + "=" +entry.getValue());
+        }
+    }
+
+    //编码解码
+    @Test
+    public void test6() throws IOException {
+        Charset charset = Charset.forName("GBK");
+
+        //获取编码器
+        CharsetEncoder ce = charset.newEncoder();
+
+        //获取解码器
+        CharsetDecoder de = charset.newDecoder();
+
+        CharBuffer charBuffer = CharBuffer.allocate(1024);
+        charBuffer.put("中国");
+        charBuffer.flip();
+
+        //编码
+        ByteBuffer buffer = ce.encode(charBuffer);
+        for (int i = 0 ; i < buffer.limit();i++) {
+            System.out.println(buffer.get());
+        }
+
+        //解码
+        buffer.flip();
+        CharBuffer charBuffer2 = de.decode(buffer);
+        System.out.println(charBuffer2.toString());
+
+        System.out.println("---------------------------------------");
+        //UTF-8解码
+        Charset charset2 = Charset.forName("UTF-8");
+        buffer.flip();
+        CharBuffer charBuffer3 = charset2.decode(buffer);
+        System.out.println(charBuffer3.toString());
+
+    }
 }
