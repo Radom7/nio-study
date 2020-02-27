@@ -8,6 +8,12 @@ import java.nio.channels.Pipe;
 
 /**
  * @Desc:
+ *  Pipe(管道)
+ *  Java NIO管道是2个线程之间的单向数据连接。
+ *  Pipe有一个source通道和一个sink通道。数据会
+ *  被写到sink通道，从source通道读取。
+ *
+ *
  * @Author: liuxing
  * @Date: 2020/2/27 15:53
  * @Version 1.0
